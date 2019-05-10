@@ -28,7 +28,7 @@ logging.info('Jackdaws love my big sphinx of quartz.')
 # Now, define a couple of other loggers which might represent areas in your
 # application:
 
-# 没有设置logger 的level，默认使用父级的level 即就是DEBUG
+# 没有设置logger 的level，默认使用父级的level,父级myapp也没有设置，再继续往上找，到爷爷辈， 即就是DEBUG
 logger1 = logging.getLogger('myapp.area1')
 logger2 = logging.getLogger('myapp.area2')
 # 注意下面这句，由于日志向父级的传播，root logger会接受到这个DEBUG日志,但是只有一个Handler能够处理这个级别的日志(文件Handler)

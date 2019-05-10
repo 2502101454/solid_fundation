@@ -18,4 +18,6 @@ logger = logging.getLogger(__name__)
 # Multiple calls to getLogger() with the same name will return a reference to the same logger object.
 import one
 import sub_p_log.two    # 注意two脚本执行的时候其内部的__name__变成了sub_p_log.two
-logger.info('main module')
+logger.info('main module') #其实这个logger本身也是没有Handler,最后还是交给了root logger的默认Handler
+# 我们经常直接是使用logging.info(xxx)这种其实是直接使用root logger.
+# 直接使用logging 或者设置logging.basicConfig都是相当于创建了root logger

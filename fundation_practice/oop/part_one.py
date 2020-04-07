@@ -88,3 +88,28 @@ print(C.X)  # 33
 c = C()
 c.m()
 print(C.X)  # 33
+
+
+# super()函数：
+# 我们都知道，在子类中如果有与父类同名的成员，那就会覆盖掉父类里的成员。那如果你想强制调用父类的成员呢？
+# 使用super()函数！这是一个非常重要的函数，最常见的就是通过super调用父类的实例化方法__init__！
+
+# 语法：super(子类名, self).方法名()，需要传入的是子类名和self，调用的是父类里的方法，按父类的方法需要传入参数。
+
+class A:
+    def __init__(self, name):
+        self.name = name
+        print("父类的__init__方法被执行了！")
+    def show(self):
+        print("父类的show方法被执行了！")
+
+class B(A):
+    def __init__(self, name, age):
+        super(B, self).__init__(name=name)
+        self.age = age
+
+    def show(self):
+        super(B, self).show()
+
+obj = B("jack", 18)
+obj.show()

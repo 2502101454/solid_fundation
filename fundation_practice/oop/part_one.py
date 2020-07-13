@@ -1,62 +1,44 @@
-# obj.attr,每次obj.attr都会开启新的独立搜索。
-# 属性的搜索顺序: 该对象自身，该类，从下而上搜索父类并按照从左至右的顺序。
-'''
-       A
-     +
-    B      C
-      +   +
-        D
-'''
-    # python 2.6中搜索方式即为经典搜索，如果到了左边父类的节点处，还会继续向左边父类的上层去深度搜索，然后最后才返回左边父类处，接着向右搜索
-    # 也就是说是继承搜索顺序是绝对深度优先的  D B A C
+# 下面大部分知识点摘自刘江的博客   https://www.liujiangblog.com/course/python/43
 
-    # 但是在python 3.0中搜索方式就变成了 绝对宽度优先  D B C A
-    # 这中流程的变化基于这样的假设：如果在树中较低处混入C，和A相比，可能会比较想获取C的属性.
-# __init__构造方法也是可以继承的
-# instance.method(args....) 是常见的方法调用方式，还可以使用class.method(instance, agrs..)进行调用，后者是常见的拓展子类方法的方式
+# 类是抽象的模板
 
-# 继承最大的好处是子类获得了父类的全部变量和方法的同时，又可以根据需要进行修改、拓展
-
-# 如下拓展子类的构造方法，当然还可以拓展一般的方法
-class Person:
-    def __init__(self, name, job):
-        self.name = name
-        self.job = job
-
-    # 运算符重载case，这样打印一个对象时，该对象就会调用这个方法
-    def __str__(self):
-        return self.name + '-'*4 + self.job
-
-class Manager(Person):
-    def __init__(self, name):
-        Person.__init__(self, name=name, job='Manager')
-
-ma = Manager(name='wz')
-# 使用父类的str方法
-print(ma)
-
-# 一些获取类名称的特殊属性
-print(ma.__class__.__name__) # Manager
-print(Manager.__name__) # Manager
-print(Manager.__bases__) # (<class '__main__.Person'>,)
-
-# 获取实例的属性
-print(ma.__dict__)  # {'name': 'wz', 'job': 'Manager'}
+# class 语句是可执行语句，当Python 执行class语句时，会从头到尾执行其主体内的所有语句，
+# 在class内赋值的变量则会创建类变量, 而内嵌的def则会创建 *类的* 方法.
 
 
-# class 的细节
-# class 语句也是真正的可执行语句，当Python 执行class语句时，会从头到尾执行其主体内的所有语句，在class内赋值的变量名，会创建类属性,
-# 而内嵌的def则会创建类的方法.
+# 类变量：定义在类中，方法之外的变量，称作类变量。类变量是所有实例公有的变量，但并不属于实例哦~
+# 实例变量：实例变量指的是实例本身拥有的变量。每个实例的变量在内存中都不一样.
 
-# 类的方法又分为三种: 实例方法、静态方法和类方法
-
-# 实例方法由实例调用，至少包含一个self参数，且为第一个参数.
-
-# 静态方法由类调用，无默认参数。将实例方法参数中的self去掉，然后在方法定义上方加上@staticmethod，就成为静态方法。
+# 在类的内部，使用def关键字来定义一个方法。
+# 类的方法又分为三种: 实例方法、静态方法和类方法，这些方法无论是在代码编排中还是内存中都** 归属于类 ***，区别在于传入的参数和调用方式不同
+#   =======一定注意：类中定义的所有的方法都属于类，不属于实例对象 !!=============
+#   1.实例方法由实例调用，至少包含一个self参数，且为第一个参数.
+#   2.静态方法由类调用，无默认参数。将实例方法参数中的self去掉，然后在方法定义上方加上@staticmethod，就成为静态方法。
 #   它属于类，和实例无关。建议只使用类名.静态方法的调用方式。（虽然也可以使用实例名.静态方法的方式调用），常用来做工具util方法
-
-# 类方法由类调用，采用@classmethod装饰，至少传入一个cls（代指类本身，类似self）参数。执行类方法时，自动将调用该方法的类赋值给cls。
+#   3.类方法由类调用，采用@classmethod装饰，至少传入一个cls（代指类本身，类似self）参数。执行类方法时，自动将调用该方法的类赋值给cls。
 #   建议只使用类名.类方法的调用方式。(虽然也可以使用实例名.类方法的方式调用)
+
+# 类、类的方法、类变量、类的实例和实例变量在内存中是如何保存的？
+# 类、类的所有方法以及类变量在内存中只有一份，所有的实例共享它们；而每一个实例都在内存中独立的保存自己和自己的实例变量。
+# 创建实例时，实例中除了封装实例变量之外，还会保存一个指向所属类的指针。
+# 因此，实例可以寻找到自己的类，并进行相关调用，而类无法寻找到自己的某个实例。
+
+# 如下摘自知乎文章=======>https://zhuanlan.zhihu.com/p/36810672
+# 实例化：创建一个类的实例，类的具体对象。在实例对象开辟一个空间，并为实例对象添加对类的引用。***并没有复制类中的属性和方法到实例对象中***
+
+
+
+# ==========关于继承：摘自刘江博客https://www.liujiangblog.com/course/python/44
+# 继承最大的好处是子类获得了父类的***全部变量和方法***的同时(__init__构造方法也是可以继承的)，又可以根据需要进行修改、拓展
+
+# obj.attr or obj.func() 的搜索顺序: =====>我亲测于test_inheritances.py 百说不如一练~
+# 对象在***调用某个方法或变量***的时候，首先在实例自身查找，接着是对应的类，再接着才根据继承机制在父类里查找。
+# 根据父类定义中的顺序，以深度优先的方式逐一查找父类！(我特意试了下，好像python2 ,3 都是深度的方式)
+
+
+# 可以查看oop_charts中的相关图表理解哈~
+
+# ===============下面是实例变量和类变量的使用=============
 
 print('class detail inside' + '.'*30)
 class ShareData(object):
@@ -88,6 +70,36 @@ print(C.X)  # 33
 c = C()
 c.m()
 print(C.X)  # 33
+
+
+# 方法调用方式还可以是class.method(instance, agrs..)进行调用，这是常见的拓展子类方法的方式
+
+
+# 如下拓展子类的构造方法，当然还可以拓展一般的方法
+class Person:
+    def __init__(self, name, job):
+        self.name = name
+        self.job = job
+
+    # 运算符重载case，这样打印一个对象时，该对象就会调用这个方法
+    def __str__(self):
+        return self.name + '-'*4 + self.job
+
+class Manager(Person):
+    def __init__(self, name):
+        Person.__init__(self, name=name, job='Manager')
+
+ma = Manager(name='wz')
+# 使用父类的str方法
+print(ma)
+
+# 一些获取类名称的特殊属性
+print(ma.__class__.__name__) # Manager
+print(Manager.__name__) # Manager
+print(Manager.__bases__) # (<class '__main__.Person'>,)
+
+# 获取实例的属性
+print(ma.__dict__)  # {'name': 'wz', 'job': 'Manager'}
 
 
 # super()函数：

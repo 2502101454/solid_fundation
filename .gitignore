@@ -1,0 +1,7 @@
+*.pyc
+*.iml
+*.out
+*.csv
+*.log
+*.blm
+.idea/*

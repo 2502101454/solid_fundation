@@ -118,13 +118,24 @@ class A:
     def show(self):
         print("父类的show方法被执行了！")
 
+
+class AA(A):
+    def __init__(self):
+        pass
+
+    def aa_func(self):
+        print("here is aa")
+
+
 class B(A):
     def __init__(self, name, age):
         super(B, self).__init__(name=name)
         self.age = age
         A.__init__(self, name=name)
+
     def show(self):
         super(B, self).show()
 
 obj = B("jack", 18)
 obj.show()
+obj.aa_func()

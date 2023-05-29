@@ -10,8 +10,8 @@ PORT = 3306
 DATABASE = 'test'
 
 # Connect to a MySQL database on network.
-# mysql_db = MySQLDatabase(DATABASE, user=USERNAME, password=PASSWORD,
-#                          host=HOST, port=PORT)
+mysql_db = MySQLDatabase(DATABASE, user=USERNAME, password=PASSWORD,
+                         host=HOST, port=PORT)
 db_pool = PooledMySQLDatabase(DATABASE, max_connections=32, stale_timeout=500, user=USERNAME, password=PASSWORD,
                             host=HOST, port=PORT)
 """
@@ -51,7 +51,7 @@ class TakaCrawlerRecord(Model):
 
 
 # print(mysql_db.connect())
-# mysql_db.create_tables([TakaCrawlerRecord])
+mysql_db.create_tables([TakaCrawlerRecord])
 
 """
 当把ctime数据类型改完DateTime后，Model中的ctime也得改成Datetime，因为Model只是提供了值的输入，所以老的DateField还是会把datetime.now
